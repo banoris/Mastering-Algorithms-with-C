@@ -1,4 +1,34 @@
-## Example files for the title:  
+# Build step example for Linux
+
+```
+# Install makedepend
+sudo apt install xutils-dev
+
+# Run code for Chapter 10: Heaps and Priority Queue
+$ cd examples_unix/examples/heap
+$ make ALGOWC_TOPDIR=../../ -f heap.mak all
+
+# Run the executables
+$ ./ex-1.exe 
+Inserting 005
+Heap size is 1
+Node=005
+Inserting 010
+Heap size is 2
+Node=010
+Node=005
+Inserting 020
+Heap size is 3
+Node=020
+Node=005
+Node=010
+...
+```
+
+
+
+
+## Example files for the title:
 	  
 # Mastering Algorithms with C, by Kyle Loudon
 	  
