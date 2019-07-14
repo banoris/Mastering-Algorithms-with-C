@@ -1,8 +1,8 @@
 /*****************************************************************************
-*                                                                            *
-*  --------------------------------- tsp.c --------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  --------------------------------- tsp.c --------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 #include <float.h>
 #include <math.h>
@@ -13,203 +13,203 @@
 #include "list.h"
 
 /*****************************************************************************
-*                                                                            *
-*  ---------------------------------- tsp ---------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ---------------------------------- tsp ---------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 int tsp(List *vertices, const TspVertex *start, List *tour, int (*match)
-   (const void *key1, const void *key2)) {
+        (const void *key1, const void *key2)) {
 
-TspVertex          *tsp_vertex,
-                   *tsp_start,
-                   *selection;
+    TspVertex          *tsp_vertex,
+                       *tsp_start,
+                       *selection;
 
-ListElmt           *element;
+    ListElmt           *element;
 
-double             minimum,
-                   distance,
-                   x,
-                   y;
+    double             minimum,
+                       distance,
+                       x,
+                       y;
 
-int                found,
-                   i;
+    int                found,
+                       i;
 
-/*****************************************************************************
-*                                                                            *
-*  Initialize the list for the tour.                                         *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Initialize the list for the tour.                                         *
+     *                                                                            *
+     *****************************************************************************/
 
-list_init(tour, NULL);
+    list_init(tour, NULL);
 
-/*****************************************************************************
-*                                                                            *
-*  Initialize all of the vertices in the graph.                              *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Initialize all of the vertices in the graph.                              *
+     *                                                                            *
+     *****************************************************************************/
 
-found = 0;
+    found = 0;
 
-for (element = list_head(vertices); element != NULL; element =
-   list_next(element)) {
+    for (element = list_head(vertices); element != NULL; element =
+            list_next(element)) {
 
-   tsp_vertex = list_data(element);
+        tsp_vertex = list_data(element);
 
-   if (match(tsp_vertex, start)) {
+        if (match(tsp_vertex, start)) {
 
-      /***********************************************************************
-      *                                                                      *
-      *  Start the tour at the start vertex.                                 *
-      *                                                                      *
-      ***********************************************************************/
+            /***********************************************************************
+             *                                                                      *
+             *  Start the tour at the start vertex.                                 *
+             *                                                                      *
+             ***********************************************************************/
 
-      if (list_ins_next(tour, list_tail(tour), tsp_vertex) != 0) {
+            if (list_ins_next(tour, list_tail(tour), tsp_vertex) != 0) {
 
-         list_destroy(tour);
-         return -1;
+                list_destroy(tour);
+                return -1;
 
-      }
+            }
 
-      /***********************************************************************
-      *                                                                      *
-      *  Save the start vertex and its coordinates.                          *
-      *                                                                      *
-      ***********************************************************************/
+            /***********************************************************************
+             *                                                                      *
+             *  Save the start vertex and its coordinates.                          *
+             *                                                                      *
+             ***********************************************************************/
 
-      tsp_start = tsp_vertex;
-      x = tsp_vertex->x;
-      y = tsp_vertex->y;
+            tsp_start = tsp_vertex;
+            x = tsp_vertex->x;
+            y = tsp_vertex->y;
 
-      /***********************************************************************
-      *                                                                      *
-      *  Color the start vertex black.                                       *
-      *                                                                      *
-      ***********************************************************************/
+            /***********************************************************************
+             *                                                                      *
+             *  Color the start vertex black.                                       *
+             *                                                                      *
+             ***********************************************************************/
 
-      tsp_vertex->color = black;
-      found = 1;
+            tsp_vertex->color = black;
+            found = 1;
 
-      }
+        }
 
-   else {
+        else {
 
-      /***********************************************************************
-      *                                                                      *
-      *  Color all other vertices white.                                     *
-      *                                                                      *
-      ***********************************************************************/
+            /***********************************************************************
+             *                                                                      *
+             *  Color all other vertices white.                                     *
+             *                                                                      *
+             ***********************************************************************/
 
-      tsp_vertex->color = white;
+            tsp_vertex->color = white;
 
-   }
+        }
 
-}
+    }
 
-/*****************************************************************************
-*                                                                            *
-*  Return if the start vertex was not found.                                 *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Return if the start vertex was not found.                                 *
+     *                                                                            *
+     *****************************************************************************/
 
-if (!found) {
+    if (!found) {
 
-   list_destroy(tour);
-   return -1;
+        list_destroy(tour);
+        return -1;
 
-}
+    }
 
-/*****************************************************************************
-*                                                                            *
-*  Use the nearest-neighbor heuristic to compute the tour.                   *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Use the nearest-neighbor heuristic to compute the tour.                   *
+     *                                                                            *
+     *****************************************************************************/
 
-i = 0;
+    i = 0;
 
-while (i < list_size(vertices) - 1) {
+    while (i < list_size(vertices) - 1) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Select the white vertex closest to the previous vertex in the tour.    *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Select the white vertex closest to the previous vertex in the tour.    *
+         *                                                                         *
+         **************************************************************************/
 
-   minimum = DBL_MAX;
+        minimum = DBL_MAX;
 
-   for (element = list_head(vertices); element != NULL; element =
-      list_next(element)) {
+        for (element = list_head(vertices); element != NULL; element =
+                list_next(element)) {
 
-      tsp_vertex = list_data(element);
+            tsp_vertex = list_data(element);
 
-      if (tsp_vertex->color == white) {
+            if (tsp_vertex->color == white) {
 
-         distance = sqrt(pow(tsp_vertex->x-x,2.0) + pow(tsp_vertex->y-y,2.0));
+                distance = sqrt(pow(tsp_vertex->x-x,2.0) + pow(tsp_vertex->y-y,2.0));
 
-         if (distance < minimum) {
+                if (distance < minimum) {
 
-            minimum = distance;
-            selection = tsp_vertex;
+                    minimum = distance;
+                    selection = tsp_vertex;
 
-         }
+                }
 
-      }
+            }
 
-   }
+        }
 
-   /**************************************************************************
-   *                                                                         *
-   *  Save the coordinates of the selected vertex.                           *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Save the coordinates of the selected vertex.                           *
+         *                                                                         *
+         **************************************************************************/
 
-   x = selection->x;
-   y = selection->y;
+        x = selection->x;
+        y = selection->y;
 
-   /**************************************************************************
-   *                                                                         *
-   *  Color the selected vertex black.                                       *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Color the selected vertex black.                                       *
+         *                                                                         *
+         **************************************************************************/
 
-   selection->color = black;
+        selection->color = black;
 
-   /**************************************************************************
-   *                                                                         *
-   *  Insert the selected vertex into the tour.                              *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Insert the selected vertex into the tour.                              *
+         *                                                                         *
+         **************************************************************************/
 
-   if (list_ins_next(tour, list_tail(tour), selection) != 0) {
+        if (list_ins_next(tour, list_tail(tour), selection) != 0) {
 
-      list_destroy(tour);
-      return -1;
+            list_destroy(tour);
+            return -1;
 
-   }
+        }
 
-   /**************************************************************************
-   *                                                                         *
-   *  Prepare to select the next vertex.                                     *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Prepare to select the next vertex.                                     *
+         *                                                                         *
+         **************************************************************************/
 
-   i++;
+        i++;
 
-}
+    }
 
-/*****************************************************************************
-*                                                                            *
-*  Insert the start vertex again to complete the tour.                       *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Insert the start vertex again to complete the tour.                       *
+     *                                                                            *
+     *****************************************************************************/
 
-if (list_ins_next(tour, list_tail(tour), tsp_start) != 0) {
+    if (list_ins_next(tour, list_tail(tour), tsp_start) != 0) {
 
-   list_destroy(tour);
-   return -1;
+        list_destroy(tour);
+        return -1;
 
-}
+    }
 
-return 0;
+    return 0;
 
 }

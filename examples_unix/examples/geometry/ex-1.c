@@ -1,11 +1,11 @@
 /*****************************************************************************
-*                                                                            *
-*  ex-1.c                                                                    *
-*  ======                                                                    *
-*                                                                            *
-*  Description: Illustrates geometric algorithms (see Chapter 17).           *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ex-1.c                                                                    *
+ *  ======                                                                    *
+ *                                                                            *
+ *  Description: Illustrates geometric algorithms (see Chapter 17).           *
+ *                                                                            *
+ *****************************************************************************/
 
 #include <math.h>
 #include <stdio.h>
@@ -15,581 +15,581 @@
 #include "list.h"
 
 /*****************************************************************************
-*                                                                            *
-*  Define data for computing convex hulls.                                   *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  Define data for computing convex hulls.                                   *
+ *                                                                            *
+ *****************************************************************************/
 
 #define            CVXPCT               10
 
 static Point CvxTestP[CVXPCT] = {
 
-   { 0.0,  1.0, 0.0},
-   {-3.0,  5.0, 0.0},
-   {-2.0, -3.0, 0.0},
-   { 0.0,  0.0, 0.0},
-   { 3.0,  2.0, 0.0},
-   {-5.0, -2.0, 0.0},
-   { 5.0,  3.0, 0.0},
-   {-3.0,  3.0, 0.0},
-   { 2.0,  3.0, 0.0},
-   {-3.0, -1.0, 0.0}
+    { 0.0,  1.0, 0.0},
+    {-3.0,  5.0, 0.0},
+    {-2.0, -3.0, 0.0},
+    { 0.0,  0.0, 0.0},
+    { 3.0,  2.0, 0.0},
+    {-5.0, -2.0, 0.0},
+    { 5.0,  3.0, 0.0},
+    {-3.0,  3.0, 0.0},
+    { 2.0,  3.0, 0.0},
+    {-3.0, -1.0, 0.0}
 
 };
 
 /*****************************************************************************
-*                                                                            *
-*  --------------------------------- main ---------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  --------------------------------- main ---------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 int main(int argc, char **argv) {
 
-List               P,
-                   polygon;
+    List               P,
+                       polygon;
 
-ListElmt           *element;
+    ListElmt           *element;
 
-Point              p1_rct,
-                   p2_rct,
-                   p3_rct,
-                   p4_rct,
-                   *point;
+    Point              p1_rct,
+                       p2_rct,
+                       p3_rct,
+                       p4_rct,
+                       *point;
 
-SPoint             p1_sph,
-                   p2_sph;
+    SPoint             p1_sph,
+                       p2_sph;
 
-double             length;
+    double             length;
 
-int                actual,
-                   i;
+    int                actual,
+                       i;
 
-/*****************************************************************************
-*                                                                            *
-*  Determine whether two line segments intersect.                            *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Determine whether two line segments intersect.                            *
+     *                                                                            *
+     *****************************************************************************/
 
-fprintf(stdout, "Determining whether two line segments intersect\n");
+    fprintf(stdout, "Determining whether two line segments intersect\n");
 
-p1_rct.x = 2.0;
-p1_rct.y = -1.0;
-p1_rct.z = 0.0;
+    p1_rct.x = 2.0;
+    p1_rct.y = -1.0;
+    p1_rct.z = 0.0;
+    
+        p2_rct.x = 4.0;
+        p2_rct.y = -1.0;
+        p2_rct.z = 0.0;
+        
+        p3_rct.x = 1.0;
+        p3_rct.y = -2.0;
+        p3_rct.z = 0.0;
+        
+        p4_rct.x = 3.0;
+        p4_rct.y = 2.0;
+        p4_rct.z = 0.0;
 
-p2_rct.x = 4.0;
-p2_rct.y = -1.0;
-p2_rct.z = 0.0;
+        if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
 
-p3_rct.x = 1.0;
-p3_rct.y = -2.0;
-p3_rct.z = 0.0;
+            fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                    "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                    p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-p4_rct.x = 3.0;
-p4_rct.y = 2.0;
-p4_rct.z = 0.0;
+        }
 
-if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
+        else {
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+            fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                    "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                    p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-   }
+        }
 
-else {
+    fprintf(stdout, " (N=OK)\n");
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+    p1_rct.x = -4.0;
+    p1_rct.y = -3.0;
+    p1_rct.z = 0.0;
 
-}
+    p2_rct.x = -2.0;
+    p2_rct.y = -1.0;
+    p2_rct.z = 0.0;
 
-fprintf(stdout, " (N=OK)\n");
+    p3_rct.x = -1.0;
+    p3_rct.y = 0.0;
+    p3_rct.z = 0.0;
 
-p1_rct.x = -4.0;
-p1_rct.y = -3.0;
-p1_rct.z = 0.0;
+    p4_rct.x = 1.0;
+    p4_rct.y = 2.0;
+    p4_rct.z = 0.0;
 
-p2_rct.x = -2.0;
-p2_rct.y = -1.0;
-p2_rct.z = 0.0;
+    if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
 
-p3_rct.x = -1.0;
-p3_rct.y = 0.0;
-p3_rct.z = 0.0;
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-p4_rct.x = 1.0;
-p4_rct.y = 2.0;
-p4_rct.z = 0.0;
+    }
 
-if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
+    else {
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-   }
+    }
 
-else {
+    fprintf(stdout, " (N=OK)\n");
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+    p1_rct.x = -4.0;
+    p1_rct.y = -3.0;
+    p1_rct.z = 0.0;
 
-}
+    p2_rct.x = -2.0;
+    p2_rct.y = -1.0;
+    p2_rct.z = 0.0;
 
-fprintf(stdout, " (N=OK)\n");
+    p3_rct.x = -4.0;
+    p3_rct.y = -1.0;
+    p3_rct.z = 0.0;
 
-p1_rct.x = -4.0;
-p1_rct.y = -3.0;
-p1_rct.z = 0.0;
+    p4_rct.x = -3.0;
+    p4_rct.y = -2.0;
+    p4_rct.z = 0.0;
 
-p2_rct.x = -2.0;
-p2_rct.y = -1.0;
-p2_rct.z = 0.0;
+    if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
 
-p3_rct.x = -4.0;
-p3_rct.y = -1.0;
-p3_rct.z = 0.0;
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-p4_rct.x = -3.0;
-p4_rct.y = -2.0;
-p4_rct.z = 0.0;
+    }
 
-if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
+    else {
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-   }
+    }
 
-else {
+    fprintf(stdout, " (Y=OK)\n");
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+    p1_rct.x = -4.0;
+    p1_rct.y = -3.0;
+    p1_rct.z = 0.0;
 
-}
+    p2_rct.x = -2.0;
+    p2_rct.y = -1.0;
+    p2_rct.z = 0.0;
 
-fprintf(stdout, " (Y=OK)\n");
+    p3_rct.x = -3.0;
+    p3_rct.y = -2.0;
+    p3_rct.z = 0.0;
 
-p1_rct.x = -4.0;
-p1_rct.y = -3.0;
-p1_rct.z = 0.0;
+    p4_rct.x = -3.0;
+    p4_rct.y = -2.0;
+    p4_rct.z = 0.0;
 
-p2_rct.x = -2.0;
-p2_rct.y = -1.0;
-p2_rct.z = 0.0;
+    if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
 
-p3_rct.x = -3.0;
-p3_rct.y = -2.0;
-p3_rct.z = 0.0;
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-p4_rct.x = -3.0;
-p4_rct.y = -2.0;
-p4_rct.z = 0.0;
+    }
 
-if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
+    else {
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-   }
+    }
 
-else {
+    fprintf(stdout, " (Y=OK)\n");
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+    p1_rct.x = -3.0;
+    p1_rct.y = -2.0;
+    p1_rct.z = 0.0;
 
-}
+    p2_rct.x = -3.0;
+    p2_rct.y = -2.0;
+    p2_rct.z = 0.0;
 
-fprintf(stdout, " (Y=OK)\n");
+    p3_rct.x = -3.0;
+    p3_rct.y = -2.0;
+    p3_rct.z = 0.0;
 
-p1_rct.x = -3.0;
-p1_rct.y = -2.0;
-p1_rct.z = 0.0;
+    p4_rct.x = -3.0;
+    p4_rct.y = -2.0;
+    p4_rct.z = 0.0;
 
-p2_rct.x = -3.0;
-p2_rct.y = -2.0;
-p2_rct.z = 0.0;
+    if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
 
-p3_rct.x = -3.0;
-p3_rct.y = -2.0;
-p3_rct.z = 0.0;
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-p4_rct.x = -3.0;
-p4_rct.y = -2.0;
-p4_rct.z = 0.0;
+    }
 
-if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
+    else {
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-   }
+    }
 
-else {
+    fprintf(stdout, " (Y=OK)\n");
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+    p1_rct.x = -3.0;
+    p1_rct.y = -2.0;
+    p1_rct.z = 0.0;
 
-}
+    p2_rct.x = 3.0;
+    p2_rct.y = 4.0;
+    p2_rct.z = 0.0;
 
-fprintf(stdout, " (Y=OK)\n");
+    p3_rct.x = -1.0;
+    p3_rct.y = 2.0;
+    p3_rct.z = 0.0;
 
-p1_rct.x = -3.0;
-p1_rct.y = -2.0;
-p1_rct.z = 0.0;
+    p4_rct.x = 3.0;
+    p4_rct.y = -1.0;
+    p4_rct.z = 0.0;
 
-p2_rct.x = 3.0;
-p2_rct.y = 4.0;
-p2_rct.z = 0.0;
+    if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
 
-p3_rct.x = -1.0;
-p3_rct.y = 2.0;
-p3_rct.z = 0.0;
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-p4_rct.x = 3.0;
-p4_rct.y = -1.0;
-p4_rct.z = 0.0;
+    }
 
-if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
+    else {
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-   }
+    }
 
-else {
+    fprintf(stdout, " (Y=OK)\n");
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+    p1_rct.x = -3.0;
+    p1_rct.y = -2.0;
+    p1_rct.z = 0.0;
 
-}
+    p2_rct.x = 3.0;
+    p2_rct.y = 4.0;
+    p2_rct.z = 0.0;
 
-fprintf(stdout, " (Y=OK)\n");
+    p3_rct.x = -1.0;
+    p3_rct.y = -2.0;
+    p3_rct.z = 0.0;
 
-p1_rct.x = -3.0;
-p1_rct.y = -2.0;
-p1_rct.z = 0.0;
+    p4_rct.x = 3.0;
+    p4_rct.y = 1.0;
+    p4_rct.z = 0.0;
 
-p2_rct.x = 3.0;
-p2_rct.y = 4.0;
-p2_rct.z = 0.0;
+    if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
 
-p3_rct.x = -1.0;
-p3_rct.y = -2.0;
-p3_rct.z = 0.0;
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-p4_rct.x = 3.0;
-p4_rct.y = 1.0;
-p4_rct.z = 0.0;
+    }
 
-if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
+    else {
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-   }
+    }
 
-else {
+    fprintf(stdout, " (N=OK)\n");
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+    p1_rct.x = -3.0;
+    p1_rct.y = -2.0;
+    p1_rct.z = 0.0;
 
-}
+    p2_rct.x = 3.0;
+    p2_rct.y = 4.0;
+    p2_rct.z = 0.0;
 
-fprintf(stdout, " (N=OK)\n");
+    p3_rct.x = -3.0;
+    p3_rct.y = -2.0;
+    p3_rct.z = 0.0;
 
-p1_rct.x = -3.0;
-p1_rct.y = -2.0;
-p1_rct.z = 0.0;
+    p4_rct.x = -4.0;
+    p4_rct.y = 3.0;
+    p4_rct.z = 0.0;
 
-p2_rct.x = 3.0;
-p2_rct.y = 4.0;
-p2_rct.z = 0.0;
+    if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
 
-p3_rct.x = -3.0;
-p3_rct.y = -2.0;
-p3_rct.z = 0.0;
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-p4_rct.x = -4.0;
-p4_rct.y = 3.0;
-p4_rct.z = 0.0;
+    }
 
-if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
+    else {
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-   }
+    }
 
-else {
+    fprintf(stdout, " (Y=OK)\n");
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+    p1_rct.x = -3.0;
+    p1_rct.y = -1.0;
+    p1_rct.z = 0.0;
 
-}
+    p2_rct.x = 3.0;
+    p2_rct.y = 4.0;
+    p2_rct.z = 0.0;
 
-fprintf(stdout, " (Y=OK)\n");
+    p3_rct.x = -3.0;
+    p3_rct.y = -2.0;
+    p3_rct.z = 0.0;
 
-p1_rct.x = -3.0;
-p1_rct.y = -1.0;
-p1_rct.z = 0.0;
+    p4_rct.x = -4.0;
+    p4_rct.y = 3.0;
+    p4_rct.z = 0.0;
 
-p2_rct.x = 3.0;
-p2_rct.y = 4.0;
-p2_rct.z = 0.0;
+    if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
 
-p3_rct.x = -3.0;
-p3_rct.y = -2.0;
-p3_rct.z = 0.0;
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-p4_rct.x = -4.0;
-p4_rct.y = 3.0;
-p4_rct.z = 0.0;
+    }
 
-if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
+    else {
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-   }
+    }
 
-else {
+    fprintf(stdout, " (N=OK)\n");
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+    p1_rct.x = -3.0;
+    p1_rct.y = -2.0;
+    p1_rct.z = 0.0;
 
-}
+    p2_rct.x = 3.0;
+    p2_rct.y = 4.0;
+    p2_rct.z = 0.0;
 
-fprintf(stdout, " (N=OK)\n");
+    p3_rct.x = -3.0;
+    p3_rct.y = -1.0;
+    p3_rct.z = 0.0;
 
-p1_rct.x = -3.0;
-p1_rct.y = -2.0;
-p1_rct.z = 0.0;
+    p4_rct.x = -4.0;
+    p4_rct.y = 3.0;
+    p4_rct.z = 0.0;
 
-p2_rct.x = 3.0;
-p2_rct.y = 4.0;
-p2_rct.z = 0.0;
+    if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
 
-p3_rct.x = -3.0;
-p3_rct.y = -1.0;
-p3_rct.z = 0.0;
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-p4_rct.x = -4.0;
-p4_rct.y = 3.0;
-p4_rct.z = 0.0;
+    }
 
-if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
+    else {
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-   }
+    }
 
-else {
+    fprintf(stdout, " (N=OK)\n");
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+    p1_rct.x = -3.0;
+    p1_rct.y = 0.0;
+    p1_rct.z = 0.0;
 
-}
+    p2_rct.x = -4.0;
+    p2_rct.y = 3.0;
+    p2_rct.z = 0.0;
 
-fprintf(stdout, " (N=OK)\n");
+    p3_rct.x = -5.0;
+    p3_rct.y = 6.0;
+    p3_rct.z = 0.0;
 
-p1_rct.x = -3.0;
-p1_rct.y = 0.0;
-p1_rct.z = 0.0;
+    p4_rct.x = -6.0;
+    p4_rct.y = 9.0;
+    p4_rct.z = 0.0;
 
-p2_rct.x = -4.0;
-p2_rct.y = 3.0;
-p2_rct.z = 0.0;
+    if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
 
-p3_rct.x = -5.0;
-p3_rct.y = 6.0;
-p3_rct.z = 0.0;
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-p4_rct.x = -6.0;
-p4_rct.y = 9.0;
-p4_rct.z = 0.0;
+    }
 
-if (lint(p1_rct, p2_rct, p3_rct, p4_rct)) {
+    else {
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) Y", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+        fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
+                "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
+                p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
 
-   }
+    }
 
-else {
+    fprintf(stdout, " (N=OK)\n");
 
-   fprintf(stdout, "(%+.1lf,%+.1lf) to (%+.1lf,%+.1lf) and (%+.1lf,%+.1lf) "
-      "to (%+.1lf,%+.1lf) N", p1_rct.x, p1_rct.y, p2_rct.x, p2_rct.y,
-      p3_rct.x, p3_rct.y, p4_rct.x, p4_rct.y);
+    /*****************************************************************************
+     *                                                                            *
+     *  Compute a convex hull.                                                    *
+     *                                                                            *
+     *****************************************************************************/
 
-}
+    fprintf(stdout, "Computing a convex hull\n");
+    fprintf(stdout, "Points in P\n");
 
-fprintf(stdout, " (N=OK)\n");
+    list_init(&P, NULL);
 
-/*****************************************************************************
-*                                                                            *
-*  Compute a convex hull.                                                    *
-*                                                                            *
-*****************************************************************************/
+    for (i = 0; i < CVXPCT; i++) {
 
-fprintf(stdout, "Computing a convex hull\n");
-fprintf(stdout, "Points in P\n");
+        if (list_ins_next(&P, list_tail(&P), &CvxTestP[i]) != 0) {
 
-list_init(&P, NULL);
+            list_destroy(&P);
+            return 1;
 
-for (i = 0; i < CVXPCT; i++) {
+        }
 
-   if (list_ins_next(&P, list_tail(&P), &CvxTestP[i]) != 0) {
+        fprintf(stdout, "P[%03d]=(%+.1lf,%+.1lf,%+.1lf)\n", i, CvxTestP[i].x,
+                CvxTestP[i].y, CvxTestP[i].z);
 
-      list_destroy(&P);
-      return 1;
+    }
 
-   }
+    if (cvxhull(&P, &polygon) != 0) {
 
-   fprintf(stdout, "P[%03d]=(%+.1lf,%+.1lf,%+.1lf)\n", i, CvxTestP[i].x,
-      CvxTestP[i].y, CvxTestP[i].z);
+        list_destroy(&P);
+        return 1;
 
-}
+    }
 
-if (cvxhull(&P, &polygon) != 0) {
+    fprintf(stdout, "Points in the convex hull\n");
 
-   list_destroy(&P);
-   return 1;
+    i = 0;
 
-}
+    for (element = list_head(&polygon); element != NULL; element =
+            list_next(element)) {
 
-fprintf(stdout, "Points in the convex hull\n");
+        i++;
+        point = list_data(element);
 
-i = 0;
+        fprintf(stdout, "polygon[%03d]=(%+.1lf,%+.1lf,%+.1lf)\n", i, point->x,
+                point->y, point->z);
 
-for (element = list_head(&polygon); element != NULL; element =
-   list_next(element)) {
+    }
 
-   i++;
-   point = list_data(element);
+    list_destroy(&P);
+    list_destroy(&polygon);
 
-   fprintf(stdout, "polygon[%03d]=(%+.1lf,%+.1lf,%+.1lf)\n", i, point->x,
-      point->y, point->z);
+    /*****************************************************************************
+     *                                                                            *
+     *  Compute arc lengths on spherical surfaces.                                *
+     *                                                                            *
+     *****************************************************************************/
 
-}
+    fprintf(stdout, "Computing arc lengths on spherical surfaces\n");
 
-list_destroy(&P);
-list_destroy(&polygon);
+    p1_sph.phi = DEGTORAD(90.0);
+    p1_sph.theta = DEGTORAD(0.0);
+    p1_sph.rho = EARTH_RADIUS;
 
-/*****************************************************************************
-*                                                                            *
-*  Compute arc lengths on spherical surfaces.                                *
-*                                                                            *
-*****************************************************************************/
+    p2_sph.phi = DEGTORAD(90.0);
+    p2_sph.theta = DEGTORAD(60.0);
+    p2_sph.rho = EARTH_RADIUS;
 
-fprintf(stdout, "Computing arc lengths on spherical surfaces\n");
+    arclen(p1_sph, p2_sph, &length);
+    actual = 3606;
 
-p1_sph.phi = DEGTORAD(90.0);
-p1_sph.theta = DEGTORAD(0.0);
-p1_sph.rho = EARTH_RADIUS;
+    fprintf(stdout, "Simple: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
+            RADTODEG(p1_sph.phi), RADTODEG(p1_sph.theta), p1_sph.rho);
 
-p2_sph.phi = DEGTORAD(90.0);
-p2_sph.theta = DEGTORAD(60.0);
-p2_sph.rho = EARTH_RADIUS;
+    fprintf(stdout, "Simple: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
+            RADTODEG(p2_sph.phi), RADTODEG(p2_sph.theta), p2_sph.rho);
 
-arclen(p1_sph, p2_sph, &length);
-actual = 3606;
+    fprintf(stdout, "length=%d, actual=%d, error=%6.4lf\n", (int)length,
+            actual, fabs(1.0 - (floor(length) / actual)));
 
-fprintf(stdout, "Simple: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
-   RADTODEG(p1_sph.phi), RADTODEG(p1_sph.theta), p1_sph.rho);
+    /* SFO (San Francisco) */
+    p1_sph.phi = DEGTORAD(90 - 37.62);
+    p1_sph.theta = DEGTORAD(-122.38);
+    p1_sph.rho = EARTH_RADIUS;
 
-fprintf(stdout, "Simple: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
-   RADTODEG(p2_sph.phi), RADTODEG(p2_sph.theta), p2_sph.rho);
+    /* LAX (Los Angeles) */
+    p2_sph.phi = DEGTORAD(90.0 - 33.94);
+    p2_sph.theta = DEGTORAD(-118.41);
+    p2_sph.rho = EARTH_RADIUS;
 
-fprintf(stdout, "length=%d, actual=%d, error=%6.4lf\n", (int)length,
-   actual, fabs(1.0 - (floor(length) / actual)));
+    arclen(p1_sph, p2_sph, &length);
+    actual = 293;
 
-/* SFO (San Francisco) */
-p1_sph.phi = DEGTORAD(90 - 37.62);
-p1_sph.theta = DEGTORAD(-122.38);
-p1_sph.rho = EARTH_RADIUS;
+    fprintf(stdout, "SFO: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
+            RADTODEG(p1_sph.phi), RADTODEG(p1_sph.theta), p1_sph.rho);
 
-/* LAX (Los Angeles) */
-p2_sph.phi = DEGTORAD(90.0 - 33.94);
-p2_sph.theta = DEGTORAD(-118.41);
-p2_sph.rho = EARTH_RADIUS;
+    fprintf(stdout, "LAX: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
+            RADTODEG(p2_sph.phi), RADTODEG(p2_sph.theta), p2_sph.rho);
 
-arclen(p1_sph, p2_sph, &length);
-actual = 293;
+    fprintf(stdout, "length=%d, actual=%d, error=%6.4lf\n", (int)length,
+            actual, fabs(1.0 - (floor(length) / actual)));
 
-fprintf(stdout, "SFO: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
-   RADTODEG(p1_sph.phi), RADTODEG(p1_sph.theta), p1_sph.rho);
+    /* SFO (San Francisco) */
+    p1_sph.phi = DEGTORAD(90 - 37.62);
+    p1_sph.theta = DEGTORAD(-122.38);
+    p1_sph.rho = EARTH_RADIUS;
 
-fprintf(stdout, "LAX: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
-   RADTODEG(p2_sph.phi), RADTODEG(p2_sph.theta), p2_sph.rho);
+    /* HKG (Hong Kong) */
+    p2_sph.phi = DEGTORAD(90.0 - 22.31);
+    p2_sph.theta = DEGTORAD(113.92);
+    p2_sph.rho = EARTH_RADIUS;
 
-fprintf(stdout, "length=%d, actual=%d, error=%6.4lf\n", (int)length,
-   actual, fabs(1.0 - (floor(length) / actual)));
+    arclen(p1_sph, p2_sph, &length);
+    actual = 6159;
 
-/* SFO (San Francisco) */
-p1_sph.phi = DEGTORAD(90 - 37.62);
-p1_sph.theta = DEGTORAD(-122.38);
-p1_sph.rho = EARTH_RADIUS;
+    fprintf(stdout, "SFO: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
+            RADTODEG(p1_sph.phi), RADTODEG(p1_sph.theta), p1_sph.rho);
 
-/* HKG (Hong Kong) */
-p2_sph.phi = DEGTORAD(90.0 - 22.31);
-p2_sph.theta = DEGTORAD(113.92);
-p2_sph.rho = EARTH_RADIUS;
+    fprintf(stdout, "HKG: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
+            RADTODEG(p2_sph.phi), RADTODEG(p2_sph.theta), p2_sph.rho);
 
-arclen(p1_sph, p2_sph, &length);
-actual = 6159;
+    fprintf(stdout, "length=%d, actual=%d, error=%6.4lf\n", (int)length,
+            actual, fabs(1.0 - (floor(length) / actual)));
 
-fprintf(stdout, "SFO: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
-   RADTODEG(p1_sph.phi), RADTODEG(p1_sph.theta), p1_sph.rho);
+    /* CDG (Paris) */
+    p1_sph.phi = DEGTORAD(90 - 49.01);
+    p1_sph.theta = DEGTORAD(2.55);
+    p1_sph.rho = EARTH_RADIUS;
 
-fprintf(stdout, "HKG: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
-   RADTODEG(p2_sph.phi), RADTODEG(p2_sph.theta), p2_sph.rho);
+    /* PER (Perth) */
+    p2_sph.phi = DEGTORAD(90.0 + 31.94);
+    p2_sph.theta = DEGTORAD(115.97);
+    p2_sph.rho = EARTH_RADIUS;
 
-fprintf(stdout, "length=%d, actual=%d, error=%6.4lf\n", (int)length,
-   actual, fabs(1.0 - (floor(length) / actual)));
+    arclen(p1_sph, p2_sph, &length);
+    actual = 7733;
 
-/* CDG (Paris) */
-p1_sph.phi = DEGTORAD(90 - 49.01);
-p1_sph.theta = DEGTORAD(2.55);
-p1_sph.rho = EARTH_RADIUS;
+    fprintf(stdout, "CDG: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
+            RADTODEG(p1_sph.phi), RADTODEG(p1_sph.theta), p1_sph.rho);
 
-/* PER (Perth) */
-p2_sph.phi = DEGTORAD(90.0 + 31.94);
-p2_sph.theta = DEGTORAD(115.97);
-p2_sph.rho = EARTH_RADIUS;
+    fprintf(stdout, "PER: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
+            RADTODEG(p2_sph.phi), RADTODEG(p2_sph.theta), p2_sph.rho);
 
-arclen(p1_sph, p2_sph, &length);
-actual = 7733;
+    fprintf(stdout, "length=%d, actual=%d, error=%6.4lf\n", (int)length,
+            actual, fabs(1.0 - (floor(length) / actual)));
 
-fprintf(stdout, "CDG: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
-   RADTODEG(p1_sph.phi), RADTODEG(p1_sph.theta), p1_sph.rho);
-
-fprintf(stdout, "PER: phi=%+07.2lf, theta=%+07.2lf, rho=%.3lf\n",
-   RADTODEG(p2_sph.phi), RADTODEG(p2_sph.theta), p2_sph.rho);
-
-fprintf(stdout, "length=%d, actual=%d, error=%6.4lf\n", (int)length,
-   actual, fabs(1.0 - (floor(length) / actual)));
-
-return 0;
+        return 0;
 
 }

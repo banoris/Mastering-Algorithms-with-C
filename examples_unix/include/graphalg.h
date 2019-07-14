@@ -1,8 +1,8 @@
 /*****************************************************************************
-*                                                                            *
-*  ------------------------------ graphalg.h ------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ------------------------------ graphalg.h ------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 #ifndef GRAPHALG_H
 #define GRAPHALG_H
@@ -11,71 +11,71 @@
 #include "list.h"
 
 /*****************************************************************************
-*                                                                            *
-*  Define a structure for vertices in minimum spanning trees.                *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  Define a structure for vertices in minimum spanning trees.                *
+ *                                                                            *
+ *****************************************************************************/
 
 typedef struct MstVertex_ {
 
-void               *data;
-double             weight;
+    void               *data;
+    double             weight;
 
-VertexColor        color;
-double             key;
+    VertexColor        color;
+    double             key;
 
-struct MstVertex_  *parent;
+    struct MstVertex_  *parent;
 
 } MstVertex;
 
 /*****************************************************************************
-*                                                                            *
-*  Define a structure for vertices in shortest-path problems.                *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  Define a structure for vertices in shortest-path problems.                *
+ *                                                                            *
+ *****************************************************************************/
 
 typedef struct PathVertex_ {
 
-void               *data;
-double             weight;
+    void               *data;
+    double             weight;
 
-VertexColor        color;
-double             d;
+    VertexColor        color;
+    double             d;
 
-struct PathVertex_ *parent;
+    struct PathVertex_ *parent;
 
 } PathVertex;
 
 /*****************************************************************************
-*                                                                            *
-*  Define a structure for vertices in traveling-salesman problems.           *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  Define a structure for vertices in traveling-salesman problems.           *
+ *                                                                            *
+ *****************************************************************************/
 
 typedef struct TspVertex_ {
 
-void               *data;
+    void               *data;
 
-double             x,
-                   y;
+    double             x,
+                       y;
 
-VertexColor        color;
+    VertexColor        color;
 
 } TspVertex;
 
 /*****************************************************************************
-*                                                                            *
-*  --------------------------- Public Interface ---------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  --------------------------- Public Interface ---------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 int mst(Graph *graph, const MstVertex *start, List *span, int (*match)(const
-   void *key1, const void *key2));
+            void *key1, const void *key2));
 
 int shortest(Graph *graph, const PathVertex *start, List *paths, int (*match)
-   (const void *key1, const void *key2));
+        (const void *key1, const void *key2));
 
 int tsp(List *vertices, const TspVertex *start, List *tour, int (*match)
-   (const void *key1, const void *key2));
+        (const void *key1, const void *key2));
 
 #endif

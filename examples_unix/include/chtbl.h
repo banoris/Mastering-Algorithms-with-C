@@ -1,8 +1,8 @@
 /*****************************************************************************
-*                                                                            *
-*  ------------------------------- chtbl.h --------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ------------------------------- chtbl.h --------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 #ifndef CHTBL_H
 #define CHTBL_H
@@ -12,32 +12,32 @@
 #include "list.h"
 
 /*****************************************************************************
-*                                                                            *
-*  Define a structure for chained hash tables.                               *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  Define a structure for chained hash tables.                               *
+ *                                                                            *
+ *****************************************************************************/
 
 typedef struct CHTbl_ {
 
-int                buckets;
+    int                buckets;
 
-int                (*h)(const void *key);
-int                (*match)(const void *key1, const void *key2);
-void               (*destroy)(void *data);
+    int                (*h)(const void *key);
+    int                (*match)(const void *key1, const void *key2);
+    void               (*destroy)(void *data);
 
-int                size;
-List               *table;
+    int                size;
+    List               *table;
 
 } CHTbl;
 
 /*****************************************************************************
-*                                                                            *
-*  --------------------------- Public Interface ---------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  --------------------------- Public Interface ---------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 int chtbl_init(CHTbl *htbl, int buckets, int (*h)(const void *key), int
-   (*match)(const void *key1, const void *key2), void (*destroy)(void *data));
+        (*match)(const void *key1, const void *key2), void (*destroy)(void *data));
 
 void chtbl_destroy(CHTbl *htbl);
 

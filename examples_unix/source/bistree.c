@@ -1,8 +1,8 @@
 /*****************************************************************************
-*                                                                            *
-*  ------------------------------- bistree.c ------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ------------------------------- bistree.c ------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
@@ -12,783 +12,783 @@
 static void destroy_right(BisTree *tree, BiTreeNode *node);
 
 /*****************************************************************************
-*                                                                            *
-*  ------------------------------ rotate_left -----------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ------------------------------ rotate_left -----------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 static void rotate_left(BiTreeNode **node) {
 
-BiTreeNode         *left,
-                   *grandchild;
+    BiTreeNode         *left,
+                       *grandchild;
 
-left = bitree_left(*node);
+    left = bitree_left(*node);
 
-if (((AvlNode *)bitree_data(left))->factor == AVL_LFT_HEAVY) {
+    if (((AvlNode *)bitree_data(left))->factor == AVL_LFT_HEAVY) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Perform an LL rotation.                                                *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Perform an LL rotation.                                                *
+         *                                                                         *
+         **************************************************************************/
 
-   bitree_left(*node) = bitree_right(left);
-   bitree_right(left) = *node;
-   ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
-   ((AvlNode *)bitree_data(left))->factor = AVL_BALANCED;
-   *node = left;
+        bitree_left(*node) = bitree_right(left);
+        bitree_right(left) = *node;
+        ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+        ((AvlNode *)bitree_data(left))->factor = AVL_BALANCED;
+        *node = left;
 
-   }
+    }
 
-else {
+    else {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Perform an LR rotation.                                                *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Perform an LR rotation.                                                *
+         *                                                                         *
+         **************************************************************************/
 
-   grandchild = bitree_right(left);
-   bitree_right(left) = bitree_left(grandchild);
-   bitree_left(grandchild) = left;
-   bitree_left(*node) = bitree_right(grandchild);
-   bitree_right(grandchild) = *node;
+        grandchild = bitree_right(left);
+        bitree_right(left) = bitree_left(grandchild);
+        bitree_left(grandchild) = left;
+        bitree_left(*node) = bitree_right(grandchild);
+        bitree_right(grandchild) = *node;
 
-   switch (((AvlNode *)bitree_data(grandchild))->factor) {
+        switch (((AvlNode *)bitree_data(grandchild))->factor) {
 
-      case AVL_LFT_HEAVY:
+            case AVL_LFT_HEAVY:
 
-      ((AvlNode *)bitree_data(*node))->factor = AVL_RGT_HEAVY;
-      ((AvlNode *)bitree_data(left))->factor = AVL_BALANCED;
-      break;
+                ((AvlNode *)bitree_data(*node))->factor = AVL_RGT_HEAVY;
+                ((AvlNode *)bitree_data(left))->factor = AVL_BALANCED;
+                break;
 
-      case AVL_BALANCED:
+            case AVL_BALANCED:
 
-      ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
-      ((AvlNode *)bitree_data(left))->factor = AVL_BALANCED;
-      break;
+                ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+                ((AvlNode *)bitree_data(left))->factor = AVL_BALANCED;
+                break;
 
-      case AVL_RGT_HEAVY:
+            case AVL_RGT_HEAVY:
 
-      ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
-      ((AvlNode *)bitree_data(left))->factor = AVL_LFT_HEAVY;
-      break;
+                ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+                ((AvlNode *)bitree_data(left))->factor = AVL_LFT_HEAVY;
+                break;
 
-   }
+        }
 
-   ((AvlNode *)bitree_data(grandchild))->factor = AVL_BALANCED;
-   *node = grandchild;
+        ((AvlNode *)bitree_data(grandchild))->factor = AVL_BALANCED;
+        *node = grandchild;
 
-}
+    }
 
-return;
+    return;
 
 }
 
 /*****************************************************************************
-*                                                                            *
-*  ----------------------------- rotate_right -----------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ----------------------------- rotate_right -----------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 static void rotate_right(BiTreeNode **node) {
 
-BiTreeNode         *right,
-                   *grandchild;
+    BiTreeNode         *right,
+                       *grandchild;
 
-right = bitree_right(*node);
+    right = bitree_right(*node);
 
-if (((AvlNode *)bitree_data(right))->factor == AVL_RGT_HEAVY) {
+    if (((AvlNode *)bitree_data(right))->factor == AVL_RGT_HEAVY) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Perform an RR rotation.                                                *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Perform an RR rotation.                                                *
+         *                                                                         *
+         **************************************************************************/
 
-   bitree_right(*node) = bitree_left(right);
-   bitree_left(right) = *node;
-   ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
-   ((AvlNode *)bitree_data(right))->factor = AVL_BALANCED;
-   *node = right;
+        bitree_right(*node) = bitree_left(right);
+        bitree_left(right) = *node;
+        ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+        ((AvlNode *)bitree_data(right))->factor = AVL_BALANCED;
+        *node = right;
 
-   }
+    }
 
-else {
+    else {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Perform an RL rotation.                                                *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Perform an RL rotation.                                                *
+         *                                                                         *
+         **************************************************************************/
 
-   grandchild = bitree_left(right);
-   bitree_left(right) = bitree_right(grandchild);
-   bitree_right(grandchild) = right;
-   bitree_right(*node) = bitree_left(grandchild);
-   bitree_left(grandchild) = *node;
+        grandchild = bitree_left(right);
+        bitree_left(right) = bitree_right(grandchild);
+        bitree_right(grandchild) = right;
+        bitree_right(*node) = bitree_left(grandchild);
+        bitree_left(grandchild) = *node;
 
-   switch (((AvlNode *)bitree_data(grandchild))->factor) {
+        switch (((AvlNode *)bitree_data(grandchild))->factor) {
 
-      case AVL_LFT_HEAVY:
+            case AVL_LFT_HEAVY:
 
-      ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
-      ((AvlNode *)bitree_data(right))->factor = AVL_RGT_HEAVY;
-      break;
+                ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+                ((AvlNode *)bitree_data(right))->factor = AVL_RGT_HEAVY;
+                break;
 
-      case AVL_BALANCED:
+            case AVL_BALANCED:
 
-      ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
-      ((AvlNode *)bitree_data(right))->factor = AVL_BALANCED;
-      break;
+                ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+                ((AvlNode *)bitree_data(right))->factor = AVL_BALANCED;
+                break;
 
-      case AVL_RGT_HEAVY:
+            case AVL_RGT_HEAVY:
 
-      ((AvlNode *)bitree_data(*node))->factor = AVL_LFT_HEAVY;
-      ((AvlNode *)bitree_data(right))->factor = AVL_BALANCED;
-      break;
+                ((AvlNode *)bitree_data(*node))->factor = AVL_LFT_HEAVY;
+                ((AvlNode *)bitree_data(right))->factor = AVL_BALANCED;
+                break;
 
-   }
+        }
 
-   ((AvlNode *)bitree_data(grandchild))->factor = AVL_BALANCED;
-   *node = grandchild;
+        ((AvlNode *)bitree_data(grandchild))->factor = AVL_BALANCED;
+        *node = grandchild;
 
-}
+    }
 
-return;
+    return;
 
 }
 
 /*****************************************************************************
-*                                                                            *
-*  ----------------------------- destroy_left -----------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ----------------------------- destroy_left -----------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 static void destroy_left(BisTree *tree, BiTreeNode *node) {
 
-BiTreeNode         **position;
+    BiTreeNode         **position;
 
-/*****************************************************************************
-*                                                                            *
-*  Do not allow destruction of an empty tree.                                *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Do not allow destruction of an empty tree.                                *
+     *                                                                            *
+     *****************************************************************************/
 
-if (bitree_size(tree) == 0)
-   return;
+    if (bitree_size(tree) == 0)
+        return;
 
-/*****************************************************************************
-*                                                                            *
-*  Determine where to destroy nodes.                                         *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Determine where to destroy nodes.                                         *
+     *                                                                            *
+     *****************************************************************************/
 
-if (node == NULL)
-   position = &tree->root;
-else
-   position = &node->left;
+    if (node == NULL)
+        position = &tree->root;
+    else
+        position = &node->left;
 
-/*****************************************************************************
-*                                                                            *
-*  Destroy the nodes.                                                        *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Destroy the nodes.                                                        *
+     *                                                                            *
+     *****************************************************************************/
 
-if (*position != NULL) {
+    if (*position != NULL) {
 
-   destroy_left(tree, *position);
-   destroy_right(tree, *position);
+        destroy_left(tree, *position);
+        destroy_right(tree, *position);
 
-   if (tree->destroy != NULL) {
+        if (tree->destroy != NULL) {
 
-      /***********************************************************************
-      *                                                                      *
-      *  Call a user-defined function to free dynamically allocated data.    *
-      *                                                                      *
-      ***********************************************************************/
+            /***********************************************************************
+             *                                                                      *
+             *  Call a user-defined function to free dynamically allocated data.    *
+             *                                                                      *
+             ***********************************************************************/
 
-      tree->destroy(((AvlNode *)(*position)->data)->data);
+            tree->destroy(((AvlNode *)(*position)->data)->data);
 
-   }
+        }
 
-   /**************************************************************************
-   *                                                                         *
-   *  Free the AVL data in the node, then free the node itself.              *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Free the AVL data in the node, then free the node itself.              *
+         *                                                                         *
+         **************************************************************************/
 
-   free((*position)->data);
-   free(*position);
-   *position = NULL;
+        free((*position)->data);
+        free(*position);
+        *position = NULL;
 
-   /**************************************************************************
-   *                                                                         *
-   *  Adjust the size of the tree to account for the destroyed node.         *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Adjust the size of the tree to account for the destroyed node.         *
+         *                                                                         *
+         **************************************************************************/
 
-   tree->size--;
+        tree->size--;
+
+    }
+
+    return;
 
 }
 
-return;
-
-}
-
 /*****************************************************************************
-*                                                                            *
-*  ----------------------------- destroy_right ----------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ----------------------------- destroy_right ----------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 static void destroy_right(BisTree *tree, BiTreeNode *node) {
 
-BiTreeNode         **position;
+    BiTreeNode         **position;
 
-/*****************************************************************************
-*                                                                            *
-*  Do not allow destruction of an empty tree.                                *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Do not allow destruction of an empty tree.                                *
+     *                                                                            *
+     *****************************************************************************/
 
-if (bitree_size(tree) == 0)
-   return;
+    if (bitree_size(tree) == 0)
+        return;
 
-/*****************************************************************************
-*                                                                            *
-*  Determine where to destroy nodes.                                         *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Determine where to destroy nodes.                                         *
+     *                                                                            *
+     *****************************************************************************/
 
-if (node == NULL)
-   position = &tree->root;
-else
-   position = &node->right;
+    if (node == NULL)
+        position = &tree->root;
+    else
+        position = &node->right;
 
-/*****************************************************************************
-*                                                                            *
-*  Destroy the nodes.                                                        *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Destroy the nodes.                                                        *
+     *                                                                            *
+     *****************************************************************************/
 
-if (*position != NULL) {
+    if (*position != NULL) {
 
-   destroy_left(tree, *position);
-   destroy_right(tree, *position);
+        destroy_left(tree, *position);
+        destroy_right(tree, *position);
 
-   if (tree->destroy != NULL) {
+        if (tree->destroy != NULL) {
 
-      /***********************************************************************
-      *                                                                      *
-      *  Call a user-defined function to free dynamically allocated data.    *
-      *                                                                      *
-      ***********************************************************************/
+            /***********************************************************************
+             *                                                                      *
+             *  Call a user-defined function to free dynamically allocated data.    *
+             *                                                                      *
+             ***********************************************************************/
 
-      tree->destroy(((AvlNode *)(*position)->data)->data);
+            tree->destroy(((AvlNode *)(*position)->data)->data);
 
-   }
+        }
 
-   /**************************************************************************
-   *                                                                         *
-   *  Free the AVL data in the node, then free the node itself.              *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Free the AVL data in the node, then free the node itself.              *
+         *                                                                         *
+         **************************************************************************/
 
-   free((*position)->data);
-   free(*position);
-   *position = NULL;
+        free((*position)->data);
+        free(*position);
+        *position = NULL;
 
-   /**************************************************************************
-   *                                                                         *
-   *  Adjust the size of the tree to account for the destroyed node.         *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Adjust the size of the tree to account for the destroyed node.         *
+         *                                                                         *
+         **************************************************************************/
 
-   tree->size--;
+        tree->size--;
+
+    }
+
+    return;
 
 }
 
-return;
-
-}
-
 /*****************************************************************************
-*                                                                            *
-*  -------------------------------- insert --------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  -------------------------------- insert --------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 static int insert(BisTree *tree, BiTreeNode **node, const void *data, int
-   *balanced) {
+        *balanced) {
 
-AvlNode            *avl_data;
+    AvlNode            *avl_data;
 
-int                cmpval,
-                   retval;
+    int                cmpval,
+                       retval;
 
-/*****************************************************************************
-*                                                                            *
-*  Insert the data into the tree.                                            *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Insert the data into the tree.                                            *
+     *                                                                            *
+     *****************************************************************************/
 
-if (bitree_is_eob(*node)) {
+    if (bitree_is_eob(*node)) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Handle insertion into an empty tree.                                   *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Handle insertion into an empty tree.                                   *
+         *                                                                         *
+         **************************************************************************/
 
-   if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL)
-      return -1;
-
-   avl_data->factor = AVL_BALANCED;
-   avl_data->hidden = 0;
-   avl_data->data = (void *)data;
-
-   return bitree_ins_left(tree, *node, avl_data);
-
-   }
-
-else {
-
-   /**************************************************************************
-   *                                                                         *
-   *  Handle insertion into a tree that is not empty.                        *
-   *                                                                         *
-   **************************************************************************/
-
-   cmpval = tree->compare(data, ((AvlNode *)bitree_data(*node))->data);
-
-   if (cmpval < 0) {
-
-      /***********************************************************************
-      *                                                                      *
-      *  Move to the left.                                                   *
-      *                                                                      *
-      ***********************************************************************/
-
-      if (bitree_is_eob(bitree_left(*node))) {
-
-         if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL)
+        if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL)
             return -1;
 
-         avl_data->factor = AVL_BALANCED;
-         avl_data->hidden = 0;
-         avl_data->data = (void *)data;
+        avl_data->factor = AVL_BALANCED;
+        avl_data->hidden = 0;
+        avl_data->data = (void *)data;
 
-         if (bitree_ins_left(tree, *node, avl_data) != 0)
-            return -1;
+        return bitree_ins_left(tree, *node, avl_data);
 
-         *balanced = 0;
+    }
 
-         }
+    else {
 
-      else {
+        /**************************************************************************
+         *                                                                         *
+         *  Handle insertion into a tree that is not empty.                        *
+         *                                                                         *
+         **************************************************************************/
 
-         if ((retval = insert(tree, &bitree_left(*node), data, balanced))
-            != 0) {
+        cmpval = tree->compare(data, ((AvlNode *)bitree_data(*node))->data);
 
-            return retval;
+        if (cmpval < 0) {
 
-         }
+            /***********************************************************************
+             *                                                                      *
+             *  Move to the left.                                                   *
+             *                                                                      *
+             ***********************************************************************/
 
-      }
+            if (bitree_is_eob(bitree_left(*node))) {
 
-      /***********************************************************************
-      *                                                                      *
-      *  Ensure that the tree remains balanced.                              *
-      *                                                                      *
-      ***********************************************************************/
+                if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL)
+                    return -1;
 
-      if (!(*balanced)) {
+                avl_data->factor = AVL_BALANCED;
+                avl_data->hidden = 0;
+                avl_data->data = (void *)data;
 
-         switch (((AvlNode *)bitree_data(*node))->factor) {
+                if (bitree_ins_left(tree, *node, avl_data) != 0)
+                    return -1;
 
-            case AVL_LFT_HEAVY:
+                *balanced = 0;
 
-            rotate_left(node);
-            *balanced = 1;
-            break;
+            }
 
-            case AVL_BALANCED:
+            else {
 
-            ((AvlNode *)bitree_data(*node))->factor = AVL_LFT_HEAVY;
-            break;
+                if ((retval = insert(tree, &bitree_left(*node), data, balanced))
+                        != 0) {
 
-            case AVL_RGT_HEAVY:
+                    return retval;
 
-            ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
-            *balanced = 1;
+                }
 
-         }
+            }
 
-      }
+            /***********************************************************************
+             *                                                                      *
+             *  Ensure that the tree remains balanced.                              *
+             *                                                                      *
+             ***********************************************************************/
 
-      } /* if (cmpval < 0) */
+            if (!(*balanced)) {
 
-   else if (cmpval > 0) {
+                switch (((AvlNode *)bitree_data(*node))->factor) {
 
-      /***********************************************************************
-      *                                                                      *
-      *  Move to the right.                                                  *
-      *                                                                      *
-      ***********************************************************************/
+                    case AVL_LFT_HEAVY:
 
-      if (bitree_is_eob(bitree_right(*node))) {
+                        rotate_left(node);
+                        *balanced = 1;
+                        break;
 
-         if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL)
-            return -1;
+                    case AVL_BALANCED:
 
-         avl_data->factor = AVL_BALANCED;
-         avl_data->hidden = 0;
-         avl_data->data = (void *)data;
+                        ((AvlNode *)bitree_data(*node))->factor = AVL_LFT_HEAVY;
+                        break;
 
-         if (bitree_ins_right(tree, *node, avl_data) != 0)
-            return -1;
+                    case AVL_RGT_HEAVY:
 
-         *balanced = 0;
+                        ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+                        *balanced = 1;
 
-         }
+                }
 
-      else {
+            }
 
-         if ((retval = insert(tree, &bitree_right(*node), data, balanced))
-            != 0) {
+        } /* if (cmpval < 0) */
 
-            return retval;
+        else if (cmpval > 0) {
 
-         }
+            /***********************************************************************
+             *                                                                      *
+             *  Move to the right.                                                  *
+             *                                                                      *
+             ***********************************************************************/
 
-      }
+            if (bitree_is_eob(bitree_right(*node))) {
 
-      /***********************************************************************
-      *                                                                      *
-      *  Ensure that the tree remains balanced.                              *
-      *                                                                      *
-      ***********************************************************************/
+                if ((avl_data = (AvlNode *)malloc(sizeof(AvlNode))) == NULL)
+                    return -1;
 
-      if (!(*balanced)) {
+                avl_data->factor = AVL_BALANCED;
+                avl_data->hidden = 0;
+                avl_data->data = (void *)data;
 
-         switch (((AvlNode *)bitree_data(*node))->factor) {
+                if (bitree_ins_right(tree, *node, avl_data) != 0)
+                    return -1;
 
-            case AVL_LFT_HEAVY:
+                *balanced = 0;
 
-            ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
-            *balanced = 1;
-            break;
+            }
 
-            case AVL_BALANCED:
+            else {
 
-            ((AvlNode *)bitree_data(*node))->factor = AVL_RGT_HEAVY;
-            break;
+                if ((retval = insert(tree, &bitree_right(*node), data, balanced))
+                        != 0) {
 
-            case AVL_RGT_HEAVY:
+                    return retval;
 
-            rotate_right(node);
-            *balanced = 1;
+                }
 
-         }
+            }
 
-      }
+            /***********************************************************************
+             *                                                                      *
+             *  Ensure that the tree remains balanced.                              *
+             *                                                                      *
+             ***********************************************************************/
 
-      } /* if (cmpval > 0) */
+            if (!(*balanced)) {
 
-   else {
+                switch (((AvlNode *)bitree_data(*node))->factor) {
 
-      /***********************************************************************
-      *                                                                      *
-      *  Handle finding a copy of the data.                                  *
-      *                                                                      *
-      ***********************************************************************/
+                    case AVL_LFT_HEAVY:
 
-      if (!((AvlNode *)bitree_data(*node))->hidden) {
+                        ((AvlNode *)bitree_data(*node))->factor = AVL_BALANCED;
+                        *balanced = 1;
+                        break;
 
-         /********************************************************************
-         *                                                                   *
-         *  Do nothing since the data is in the tree and not hidden.         *
-         *                                                                   *
-         ********************************************************************/
+                    case AVL_BALANCED:
 
-         return 1;
+                        ((AvlNode *)bitree_data(*node))->factor = AVL_RGT_HEAVY;
+                        break;
 
-         }
+                    case AVL_RGT_HEAVY:
 
-      else {
+                        rotate_right(node);
+                        *balanced = 1;
 
-         /********************************************************************
-         *                                                                   *
-         *  Insert the new data and mark it as not hidden.                   *
-         *                                                                   *
-         ********************************************************************/
+                }
 
-         if (tree->destroy != NULL) {
+            }
 
-            /*****************************************************************
-            *                                                                *
-            *  Destroy the hidden data since it is being replaced.           *
-            *                                                                *
-            *****************************************************************/
+        } /* if (cmpval > 0) */
 
-            tree->destroy(((AvlNode *)bitree_data(*node))->data);
+        else {
 
-         }
+            /***********************************************************************
+             *                                                                      *
+             *  Handle finding a copy of the data.                                  *
+             *                                                                      *
+             ***********************************************************************/
 
-         ((AvlNode *)bitree_data(*node))->data = (void *)data;
-         ((AvlNode *)bitree_data(*node))->hidden = 0;
+            if (!((AvlNode *)bitree_data(*node))->hidden) {
 
-         /********************************************************************
-         *                                                                   *
-         *  Do not rebalance because the tree structure is unchanged.        *
-         *                                                                   *
-         ********************************************************************/
+                /********************************************************************
+                 *                                                                   *
+                 *  Do nothing since the data is in the tree and not hidden.         *
+                 *                                                                   *
+                 ********************************************************************/
 
-         *balanced = 1;
+                return 1;
 
-      }
+            }
 
-   }
+            else {
+
+                /********************************************************************
+                 *                                                                   *
+                 *  Insert the new data and mark it as not hidden.                   *
+                 *                                                                   *
+                 ********************************************************************/
+
+                if (tree->destroy != NULL) {
+
+                    /*****************************************************************
+                     *                                                                *
+                     *  Destroy the hidden data since it is being replaced.           *
+                     *                                                                *
+                     *****************************************************************/
+
+                    tree->destroy(((AvlNode *)bitree_data(*node))->data);
+
+                }
+
+                ((AvlNode *)bitree_data(*node))->data = (void *)data;
+                ((AvlNode *)bitree_data(*node))->hidden = 0;
+
+                /********************************************************************
+                 *                                                                   *
+                 *  Do not rebalance because the tree structure is unchanged.        *
+                 *                                                                   *
+                 ********************************************************************/
+
+                *balanced = 1;
+
+            }
+
+        }
+
+    }
+
+    return 0;
 
 }
 
-return 0;
-
-}
-
 /*****************************************************************************
-*                                                                            *
-*  --------------------------------- hide ---------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  --------------------------------- hide ---------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 static int hide(BisTree *tree, BiTreeNode *node, const void *data) {
 
-int                cmpval,
-                   retval;
+    int                cmpval,
+                       retval;
 
-if (bitree_is_eob(node)) {
+    if (bitree_is_eob(node)) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Return that the data was not found.                                    *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Return that the data was not found.                                    *
+         *                                                                         *
+         **************************************************************************/
 
-   return -1;
+        return -1;
 
-}
+    }
 
-cmpval = tree->compare(data, ((AvlNode *)bitree_data(node))->data);
+    cmpval = tree->compare(data, ((AvlNode *)bitree_data(node))->data);
 
-if (cmpval < 0) {
+    if (cmpval < 0) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Move to the left.                                                      *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Move to the left.                                                      *
+         *                                                                         *
+         **************************************************************************/
 
-   retval = hide(tree, bitree_left(node), data);
+        retval = hide(tree, bitree_left(node), data);
 
-   }
+    }
 
-else if (cmpval > 0) {
+    else if (cmpval > 0) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Move to the right.                                                     *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Move to the right.                                                     *
+         *                                                                         *
+         **************************************************************************/
 
-   retval = hide(tree, bitree_right(node), data);
+        retval = hide(tree, bitree_right(node), data);
 
-   }
+    }
 
-else {
+    else {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Mark the node as hidden.                                               *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Mark the node as hidden.                                               *
+         *                                                                         *
+         **************************************************************************/
 
-   ((AvlNode *)bitree_data(node))->hidden = 1;
-   retval = 0;
+        ((AvlNode *)bitree_data(node))->hidden = 1;
+        retval = 0;
 
-}
+    }
 
-return retval;
+    return retval;
 
 }
 
 /*****************************************************************************
-*                                                                            *
-*  -------------------------------- lookup --------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  -------------------------------- lookup --------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 static int lookup(BisTree *tree, BiTreeNode *node, void **data) {
 
-int                cmpval,
-                   retval;
+    int                cmpval,
+                       retval;
 
-if (bitree_is_eob(node)) {
+    if (bitree_is_eob(node)) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Return that the data was not found.                                    *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Return that the data was not found.                                    *
+         *                                                                         *
+         **************************************************************************/
 
-   return -1;
+        return -1;
 
-}
+    }
 
-cmpval = tree->compare(*data, ((AvlNode *)bitree_data(node))->data);
+    cmpval = tree->compare(*data, ((AvlNode *)bitree_data(node))->data);
 
-if (cmpval < 0) {
+    if (cmpval < 0) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Move to the left.                                                      *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Move to the left.                                                      *
+         *                                                                         *
+         **************************************************************************/
 
-   retval = lookup(tree, bitree_left(node), data);
+        retval = lookup(tree, bitree_left(node), data);
 
-   }
+    }
 
-else if (cmpval > 0) {
+    else if (cmpval > 0) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Move to the right.                                                     *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Move to the right.                                                     *
+         *                                                                         *
+         **************************************************************************/
 
-   retval = lookup(tree, bitree_right(node), data);
+        retval = lookup(tree, bitree_right(node), data);
 
-   }
+    }
 
-else {
+    else {
 
-   if (!((AvlNode *)bitree_data(node))->hidden) {
+        if (!((AvlNode *)bitree_data(node))->hidden) {
 
-      /***********************************************************************
-      *                                                                      *
-      *  Pass back the data from the tree.                                   *
-      *                                                                      *
-      ***********************************************************************/
+            /***********************************************************************
+             *                                                                      *
+             *  Pass back the data from the tree.                                   *
+             *                                                                      *
+             ***********************************************************************/
 
-      *data = ((AvlNode *)bitree_data(node))->data;
-      retval = 0;
+            *data = ((AvlNode *)bitree_data(node))->data;
+            retval = 0;
 
-      }
+        }
 
-   else {
+        else {
 
-      /***********************************************************************
-      *                                                                      *
-      *  Return that the data was not found.                                 *
-      *                                                                      *
-      ***********************************************************************/
+            /***********************************************************************
+             *                                                                      *
+             *  Return that the data was not found.                                 *
+             *                                                                      *
+             ***********************************************************************/
 
-      return -1;
+            return -1;
 
-   }
+        }
 
-}
+    }
 
-return retval;
+    return retval;
 
 }
 
 /*****************************************************************************
-*                                                                            *
-*  ----------------------------- bistree_init -----------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ----------------------------- bistree_init -----------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 void bistree_init(BisTree *tree, int (*compare)(const void *key1, const void
-   *key2), void (*destroy)(void *data)) {
+            *key2), void (*destroy)(void *data)) {
 
-/*****************************************************************************
-*                                                                            *
-*  Initialize the tree.                                                      *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Initialize the tree.                                                      *
+     *                                                                            *
+     *****************************************************************************/
 
-bitree_init(tree, destroy);
-tree->compare = compare;
+    bitree_init(tree, destroy);
+    tree->compare = compare;
 
-return;
+    return;
 
 }
 
 /*****************************************************************************
-*                                                                            *
-*  ---------------------------- bistree_destroy ---------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ---------------------------- bistree_destroy ---------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 void bistree_destroy(BisTree *tree) {
 
-/*****************************************************************************
-*                                                                            *
-*  Destroy all nodes in the tree.                                            *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Destroy all nodes in the tree.                                            *
+     *                                                                            *
+     *****************************************************************************/
 
-destroy_left(tree, NULL);
+    destroy_left(tree, NULL);
 
-/*****************************************************************************
-*                                                                            *
-*  No operations are allowed now, but clear the structure as a precaution.   *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  No operations are allowed now, but clear the structure as a precaution.   *
+     *                                                                            *
+     *****************************************************************************/
 
-memset(tree, 0, sizeof(BisTree));
+    memset(tree, 0, sizeof(BisTree));
 
-return;
+    return;
 
 }
 
 /*****************************************************************************
-*                                                                            *
-*  ---------------------------- bistree_insert ----------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ---------------------------- bistree_insert ----------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 int bistree_insert(BisTree *tree, const void *data) {
 
-int                balanced = 0;
+    int                balanced = 0;
 
-return insert(tree, &bitree_root(tree), data, &balanced);
+    return insert(tree, &bitree_root(tree), data, &balanced);
 
 }
 
 /*****************************************************************************
-*                                                                            *
-*  ---------------------------- bistree_remove ----------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ---------------------------- bistree_remove ----------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 int bistree_remove(BisTree *tree, const void *data) {
 
-return hide(tree, bitree_root(tree), data);
+    return hide(tree, bitree_root(tree), data);
 
 }
 
 /*****************************************************************************
-*                                                                            *
-*  ---------------------------- bistree_lookup ----------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ---------------------------- bistree_lookup ----------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 int bistree_lookup(BisTree *tree, void **data) {
 
-return lookup(tree, bitree_root(tree), data);
+    return lookup(tree, bitree_root(tree), data);
 
 }

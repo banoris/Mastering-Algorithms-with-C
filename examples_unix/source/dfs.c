@@ -1,8 +1,8 @@
 /*****************************************************************************
-*                                                                            *
-*  -------------------------------- dfs.c ---------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  -------------------------------- dfs.c ---------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 #include <stdlib.h>
 
@@ -11,132 +11,132 @@
 #include "list.h"
 
 /*****************************************************************************
-*                                                                            *
-*  ------------------------------- dfs_main -------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ------------------------------- dfs_main -------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 static int dfs_main(Graph *graph, AdjList *adjlist, List *ordered) {
 
-AdjList            *clr_adjlist;
+    AdjList            *clr_adjlist;
 
-DfsVertex          *clr_vertex,
-                   *adj_vertex;
+    DfsVertex          *clr_vertex,
+                       *adj_vertex;
 
-ListElmt           *member;
+    ListElmt           *member;
 
-/*****************************************************************************
-*                                                                            *
-*  Color the vertex gray and traverse its adjacency list.                    *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Color the vertex gray and traverse its adjacency list.                    *
+     *                                                                            *
+     *****************************************************************************/
 
-((DfsVertex *)adjlist->vertex)->color = gray;
+    ((DfsVertex *)adjlist->vertex)->color = gray;
 
-for (member = list_head(&adjlist->adjacent); member != NULL; member =
-   list_next(member)) {
+    for (member = list_head(&adjlist->adjacent); member != NULL; member =
+            list_next(member)) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Determine the color of the next adjacent vertex.                       *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Determine the color of the next adjacent vertex.                       *
+         *                                                                         *
+         **************************************************************************/
 
-   adj_vertex = list_data(member);
+        adj_vertex = list_data(member);
 
-   if (graph_adjlist(graph, adj_vertex, &clr_adjlist) != 0)
-      return -1;
+        if (graph_adjlist(graph, adj_vertex, &clr_adjlist) != 0)
+            return -1;
 
-   clr_vertex = clr_adjlist->vertex;
+        clr_vertex = clr_adjlist->vertex;
 
-   /**************************************************************************
-   *                                                                         *
-   *  Move one vertex deeper when the next adjacent vertex is white.         *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Move one vertex deeper when the next adjacent vertex is white.         *
+         *                                                                         *
+         **************************************************************************/
 
-   if (clr_vertex->color == white) {
+        if (clr_vertex->color == white) {
 
-      if (dfs_main(graph, clr_adjlist, ordered) != 0)
-         return -1;
+            if (dfs_main(graph, clr_adjlist, ordered) != 0)
+                return -1;
 
-   }
+        }
+
+    }
+
+    /*****************************************************************************
+     *                                                                            *
+     *  Color the current vertex black and make it first in the list.             *
+     *                                                                            *
+     *****************************************************************************/
+
+    ((DfsVertex *)adjlist->vertex)->color = black;
+
+    if (list_ins_next(ordered, NULL, (DfsVertex *)adjlist->vertex) != 0)
+        return -1;
+
+    return 0;
 
 }
 
 /*****************************************************************************
-*                                                                            *
-*  Color the current vertex black and make it first in the list.             *
-*                                                                            *
-*****************************************************************************/
-
-((DfsVertex *)adjlist->vertex)->color = black;
-
-if (list_ins_next(ordered, NULL, (DfsVertex *)adjlist->vertex) != 0)
-   return -1;
-
-return 0;
-
-}
-
-/*****************************************************************************
-*                                                                            *
-*  ---------------------------------- dfs ---------------------------------  *
-*                                                                            *
-*****************************************************************************/
+ *                                                                            *
+ *  ---------------------------------- dfs ---------------------------------  *
+ *                                                                            *
+ *****************************************************************************/
 
 int dfs(Graph *graph, List *ordered) {
 
-DfsVertex          *vertex;
+    DfsVertex          *vertex;
 
-ListElmt           *element;
+    ListElmt           *element;
 
-/*****************************************************************************
-*                                                                            *
-*  Initialize all of the vertices in the graph.                              *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Initialize all of the vertices in the graph.                              *
+     *                                                                            *
+     *****************************************************************************/
 
-for (element = list_head(&graph_adjlists(graph)); element != NULL; element =
-   list_next(element)) {
+    for (element = list_head(&graph_adjlists(graph)); element != NULL; element =
+            list_next(element)) {
 
-   vertex = ((AdjList *)list_data(element))->vertex;
-   vertex->color = white;
+        vertex = ((AdjList *)list_data(element))->vertex;
+        vertex->color = white;
 
-}
+    }
 
-/*****************************************************************************
-*                                                                            *
-*  Perform depth-first search.                                               *
-*                                                                            *
-*****************************************************************************/
+    /*****************************************************************************
+     *                                                                            *
+     *  Perform depth-first search.                                               *
+     *                                                                            *
+     *****************************************************************************/
 
-list_init(ordered, NULL);
+    list_init(ordered, NULL);
 
-for (element = list_head(&graph_adjlists(graph)); element != NULL; element =
-   list_next(element)) {
+    for (element = list_head(&graph_adjlists(graph)); element != NULL; element =
+            list_next(element)) {
 
-   /**************************************************************************
-   *                                                                         *
-   *  Ensure that every component of unconnected graphs is searched.         *
-   *                                                                         *
-   **************************************************************************/
+        /**************************************************************************
+         *                                                                         *
+         *  Ensure that every component of unconnected graphs is searched.         *
+         *                                                                         *
+         **************************************************************************/
 
-   vertex = ((AdjList *)list_data(element))->vertex;
+        vertex = ((AdjList *)list_data(element))->vertex;
 
-   if (vertex->color == white) {
+        if (vertex->color == white) {
 
-      if (dfs_main(graph, (AdjList *)list_data(element), ordered) != 0) {
+            if (dfs_main(graph, (AdjList *)list_data(element), ordered) != 0) {
 
-         list_destroy(ordered);
-         return -1;
+                list_destroy(ordered);
+                return -1;
 
-      }
+            }
 
-   }
+        }
 
-}
+    }
 
-return 0;
+    return 0;
 
 }
